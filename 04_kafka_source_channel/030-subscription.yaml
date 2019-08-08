@@ -1,0 +1,19 @@
+apiVersion: eventing.knative.dev/v1alpha1
+kind: Subscription
+metadata:
+  name: sub1
+spec:
+  channel:
+    apiVersion: messaging.knative.dev/v1alpha1
+    kind: KafkaChannel
+    name: kafka-channel-one
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1alpha1
+      kind: Service
+      name: channel-display0
+  # reply:
+  #   channel:
+  #     apiVersion: eventing.knative.dev/v1alpha1
+  #     kind: Channel
+  #     name: replychannel
