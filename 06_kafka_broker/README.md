@@ -59,7 +59,7 @@ kubectl apply -f 010-ksvc.yaml
 Have a source publishing events to the mesh/broker:
 
 ```
-kubectl apply -f 020-cronjob-source.yaml
+kubectl apply -f 020-k8s-events.yaml
 ```
 
 Finally apply a filter that routes the events to our service:

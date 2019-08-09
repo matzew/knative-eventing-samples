@@ -1,7 +1,7 @@
 apiVersion: eventing.knative.dev/v1alpha1
 kind: Broker
 metadata:
-  name: kafka
+  name: default
 spec:
   channelTemplateSpec:
     apiVersion: messaging.knative.dev/v1alpha1

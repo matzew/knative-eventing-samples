@@ -1,14 +1,11 @@
 apiVersion: eventing.knative.dev/v1alpha1
 kind: Trigger
 metadata:
-  name: testevents-trigger
+  name: testevents-trigger-kafka
   namespace: default
 spec:
-  filter:
-    sourceAndType:
-      type: dev.knative.cronjob.event
   subscriber:
     ref:
       apiVersion: serving.knative.dev/v1alpha1
       kind: Service
-      name: broker-display
+      name: broker-display2

@@ -1,15 +1,11 @@
 apiVersion: sources.eventing.knative.dev/v1alpha1
-kind: ApiServerSource
+kind: CronJobSource
 metadata:
-  name: testevents-kafka
-  namespace: default
+  name: cronjob-source
 spec:
-  serviceAccountName: events-sa
-  mode: Resource
-  resources:
-  - apiVersion: v1
-    kind: Event
+  schedule: "* * * * *"
+  data: '{"message": "Hello world!"}'
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
     kind: Broker
-    name: kafka
+    name: default
