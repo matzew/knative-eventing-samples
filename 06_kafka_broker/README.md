@@ -56,6 +56,12 @@ Deploy consumer service:
 kubectl apply -f 010-ksvc.yaml
 ```
 
+If you have *NOT* done before, apply the serviceaccount:
+
+```
+kubectl apply -f 010-serviceaccount.yaml
+```
+
 Have a source publishing events to the mesh/broker:
 
 ```
