@@ -11,5 +11,5 @@ spec:
     kind: Event
   sink:
     apiVersion: messaging.knative.dev/v1alpha1
-    kind: Channel
+    kind: InMemoryChannel
     name: testchannel
