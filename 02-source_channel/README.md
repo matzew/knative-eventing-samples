@@ -1,6 +1,6 @@
 # Source to Channel with multiple Subscribers 
 
-A more advanced and flexible use case of Knative eventing is to sink the events from the emitting source to a Knative Eventing channel. On the channel we can have multiple subscribers, that are all receiving the _same_ events, for different purposes. 
+A more advanced and flexible use case of Knative eventing is to sink the events from the emitting source to a Knative Eventing channel. From the channel we can broadcast all events to multiple Knative Serving Services, using a `Subscription`. Each consuming Knative Serving Service is than receiving exactly the _same_ events. However the individual services may deal with the event differently.
 
 ## Deploy the first consuming Knative Serving Service
 
