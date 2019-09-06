@@ -1,6 +1,6 @@
 # Source to Service 
 
-One of the simplest uses cases of Knative eventing is to directly sink the events from the emitting source a Knative Serving Service (`ksvc`).
+One of the simplest uses cases of Knative eventing is to directly sink the events from the emitting source to a Knative Serving Service (`ksvc`).
 
 ## Deploy the consuming Knative Serving Service
 
@@ -10,11 +10,11 @@ The first step is the deployment of a Knative Serving service that later acts as
 k apply -f 000-ksvc.yaml
 ```
 
-The above installs a new `ksvc`, called _service-one_, to the `default` namespace. After applying file, we can check some details about our new `ksvc`, by running ` k get ksvc`:
+The above installs a new `ksvc`, called _service-one_, to the `default` namespace. After applying the file, we can check some details about our new `ksvc`, by running ` k get ksvc`:
 
 ```
 NAME               URL                                           LATESTCREATED            LATESTREADY              READY   REASON
-service-one0   http://service-one0.default.example.com   service-one0-kfhpm   service-one0-kfhpm   True    
+service-one   http://service-one.default.example.com   service-one-kfhpm   service-one-kfhpm   True
 ```
 
 We now have a `ksvc` running in the background, waiting for some incoming HTTP requests.
@@ -66,17 +66,23 @@ We will now see that a new pod is up and running, representing the `ApiServerSou
 ```
 NAME                                                              READY   STATUS    RESTARTS   AGE
 apiserversource-testevents-91f06d1f-cfe6-11e9-9d67-70c21b48r9pt   1/1     Running   0          86m
-service-one0-kfhpm-deployment-747c97d7c5-x6hnl                    2/2     Running   0          85s
+service-one-kfhpm-deployment-747c97d7c5-x6hnl                    2/2     Running   0          85s
 ```
 
 The `apiserversource` pod is now running the `ApiServerSource`, which directly sends its events to the hardwired `ksvc`, our `service-one` installation.
 
+> NOTE: To retrieve an overview of all source that are currently deployed in your namespace, just run `k get sources`. In our case you get the following output:
+>```
+>NAME                                                      AGE
+>apiserversource.sources.eventing.knative.dev/testevents   5m
+>```
+
 ## Show the consumed events
 
-Finally we can now see the consumed Kubernetes API server events in the log of the `service-one0-kfhpm-deployment-747c97d7c5-x6hnl` pod, by running:
+Finally we can now see the consumed Kubernetes API server events in the log of the `service-one-kfhpm-deployment-747c97d7c5-x6hnl` pod, by running:
 
 ```
-k logs -f service-one0-kfhpm-deployment-747c97d7c5-x6hnl -c user-container
+k logs -f service-one-kfhpm-deployment-747c97d7c5-x6hnl -c user-container
 ```
 
 The pod does run two containers, but we are only interested in the `user-container`, running our application via Knative Serving. In the log we now see some Kubernetes API server events, wrapped as CloudEvents:
