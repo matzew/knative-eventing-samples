@@ -5,15 +5,10 @@ metadata:
 spec:
   channel:
     apiVersion: messaging.knative.dev/v1alpha1
-    kind: Channel
+    kind: InMemoryChannel
     name: testchannel
   subscriber:
     ref:
       apiVersion: serving.knative.dev/v1alpha1
       kind: Service
       name: channel-display0
-  # reply:
-  #   channel:
-  #     apiVersion: eventing.knative.dev/v1alpha1
-  #     kind: Channel
-  #     name: replychannel

@@ -146,4 +146,4 @@ We now have seen that one can simply consume events using a _Knative Eventing So
 
 While this use-case is simple and easy to implement, it has some limitations, that the _Knative Eventing Source_ is not able to distribute its events to multiple consumers.
 
-NEXT: Channel and multiple consumers.....
+NEXT: [Channel and multiple consumers](../02-source_channel)

@@ -1,4 +1,4 @@
 apiVersion: messaging.knative.dev/v1alpha1
-kind: Channel
+kind: InMemoryChannel
 metadata:
   name: testchannel
