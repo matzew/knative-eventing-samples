@@ -9,11 +9,11 @@ spec:
     name: kafka-channel-one
   subscriber:
     ref:
-      apiVersion: serving.knative.dev/v1alpha1
+      apiVersion: serving.knative.dev/v1
       kind: Service
       name: channel-display0
   # reply:
   #   channel:
-  #     apiVersion: eventing.knative.dev/v1alpha1
+  #     apiVersion: eventing.knative.dev/v1
   #     kind: Channel
   #     name: replychannel

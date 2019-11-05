@@ -9,6 +9,6 @@ spec:
     name: testchannel
   subscriber:
     ref:
-      apiVersion: serving.knative.dev/v1alpha1
+      apiVersion: serving.knative.dev/v1
       kind: Service
       name: channel-display1
