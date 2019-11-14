@@ -5,7 +5,7 @@ metadata:
 spec:
   channel:
     apiVersion: messaging.knative.dev/v1alpha1
-    kind: InMemoryChannel
+    kind: KafkaChannel
     name: testchannel
   subscriber:
     ref:
