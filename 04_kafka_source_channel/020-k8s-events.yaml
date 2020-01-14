@@ -10,6 +10,7 @@ spec:
   - apiVersion: v1
     kind: Event
   sink:
-    apiVersion: messaging.knative.dev/v1alpha1
-    kind: KafkaChannel
-    name: kafka-channel-one
+    ref:
+      apiVersion: messaging.knative.dev/v1alpha1
+      kind: KafkaChannel
+      name: kafka-channel-one
