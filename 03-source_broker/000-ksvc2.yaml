@@ -6,4 +6,4 @@ spec:
   template:
     spec:
       containers:
-      - image: docker.io/cds19/event-display
+      - image: docker.io/matzew/eventing-display
