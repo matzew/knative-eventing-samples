@@ -6,4 +6,4 @@ spec:
   template:
     spec:
       containers:
-      - image: docker.io/matzew/eventing-display
+      - image: quay.io/matzew/event-display
