@@ -4,6 +4,7 @@ metadata:
   name: testevents-trigger0
   namespace: default
 spec:
+  broker: default
   filter:
     attributes:
       type: dev.knative.sources.ping

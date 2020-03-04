@@ -3,6 +3,7 @@ kind: Trigger
 metadata:
   name: testevents-trigger
 spec:
+  broker: default
   subscriber:
     ref:
       apiVersion: serving.knative.dev/v1
