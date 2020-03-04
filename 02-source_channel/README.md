@@ -24,7 +24,7 @@ We now have a `ksvc` running in the background, waiting for some incoming HTTP r
 Next we need to create a channel and in our case we use the `InMemoryChannel` API:
 
 ```
-apiVersion: messaging.knative.dev/v1alpha1
+apiVersion: messaging.knative.dev/v1beta1
 kind: InMemoryChannel
 metadata:
   name: testchannel
@@ -65,7 +65,7 @@ k apply -f 010-serviceaccount.yaml
 With the `ServiceAccount` in place we can finally connect our `ApiServerSource` to the `ksvc` so it can consume events. Let's take a look at the file:
 
 ```yaml
-apiVersion: sources.eventing.knative.dev/v1alpha1
+apiVersion: sources.knative.dev/v1alpha1
 kind: ApiServerSource
 metadata:
   name: testevents02
@@ -105,18 +105,18 @@ The `apiserversource` pod is now running the `ApiServerSource`, which directly s
 With the usage of a Channel we have a great level of flexibility, that we can _subscribe_ as many consumers we want to a given channel, like:
 
 ```yaml
-apiVersion: messaging.knative.dev/v1alpha1
+apiVersion: messaging.knative.dev/v1beta1
 kind: Subscription
 metadata:
   name: sub1
 spec:
   channel:
-    apiVersion: messaging.knative.dev/v1alpha1
+    apiVersion: messaging.knative.dev/v1beta1
     kind: InMemoryChannel
     name: testchannel
   subscriber:
     ref:
-      apiVersion: serving.knative.dev/v1alpha1
+      apiVersion: serving.knative.dev/v1
       kind: Service
       name: channel-display0
 ```
@@ -140,55 +140,51 @@ k logs -f channel-display0-kfhpm-deployment-747c97d7c5-x6hnl -c user-container
 The pod does run two containers, but we are only interested in the `user-container`, running our application via Knative Serving. In the log we now see some Kubernetes API server events, wrapped as CloudEvents:
 
 ```
-☁️  CloudEvent: valid ✅
+☁️  cloudevents.Event
+Validation: valid
 Context Attributes,
-  SpecVersion: 0.3
-  Type: dev.knative.apiserver.resource.add
-  Source: https://10.96.0.1:443
-  ID: f3a52b07-d1d9-4179-84c2-a5b38406fecd
-  Time: 2019-09-05T15:39:02.877250641Z
-  DataContentType: application/json
-  Extensions: 
-    knativehistory: testchannel-kn-channel.default.svc.cluster.local
-    subject: /apis/v1/namespaces/default/events/channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e
-Transport Context,
-  URI: /
-  Host: channel-display0.default.svc.cluster.local
-  Method: POST
+  specversion: 1.0
+  type: dev.knative.apiserver.resource.update
+  source: https://10.96.0.1:443
+  subject: /apis/v1/namespaces/default/events/sub2.15f90d0486a6db40
+  id: 955985a1-c4db-4fd4-bb79-5251d504e806
+  time: 2020-03-04T08:37:37.095544617Z
+  datacontenttype: application/json
+Extensions,
+  knativehistory: testchannel-kn-channel.default.svc.cluster.local
+  traceparent: 00-2784c2a78740e6f00330540e6a207430-46cafa0cae465760-00
 Data,
   {
     "apiVersion": "v1",
-    "count": 1,
+    "count": 2,
     "eventTime": null,
-    "firstTimestamp": "2019-09-05T15:39:02Z",
+    "firstTimestamp": "2020-03-04T08:37:37Z",
     "involvedObject": {
-      "apiVersion": "v1",
-      "fieldPath": "spec.containers{queue-proxy}",
-      "kind": "Pod",
-      "name": "channel-display0-kfhpm-deployment-747c97d7c5-hq6tl",
+      "apiVersion": "messaging.knative.dev/v1alpha1",
+      "kind": "Subscription",
+      "name": "sub2",
       "namespace": "default",
-      "resourceVersion": "13751",
-      "uid": "fb0fe720-cff2-11e9-9d67-70c21b40e0b5"
+      "resourceVersion": "4896",
+      "uid": "3347ff5b-e7da-469b-8a11-faa5f9f4ba47"
     },
     "kind": "Event",
-    "lastTimestamp": "2019-09-05T15:39:02Z",
-    "message": "Readiness probe failed: cannot exec in a stopped state: unknown\r\n",
+    "lastTimestamp": "2020-03-04T08:37:37Z",
+    "message": "Subscription reconciled: \"default/sub2\"",
     "metadata": {
-      "creationTimestamp": "2019-09-05T15:39:02Z",
-      "name": "channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e",
+      "creationTimestamp": "2020-03-04T08:37:37Z",
+      "name": "sub2.15f90d0486a6db40",
       "namespace": "default",
-      "resourceVersion": "14008",
-      "selfLink": "/api/v1/namespaces/default/events/channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e",
-      "uid": "4981805f-cff3-11e9-9d67-70c21b40e0b5"
+      "resourceVersion": "4909",
+      "selfLink": "/api/v1/namespaces/default/events/sub2.15f90d0486a6db40",
+      "uid": "2e247f93-ad8c-4b91-9a7a-37c9e69b960d"
     },
-    "reason": "Unhealthy",
+    "reason": "SubscriptionReconciled",
     "reportingComponent": "",
     "reportingInstance": "",
     "source": {
-      "component": "kubelet",
-      "host": "minikube"
+      "component": "subscription-controller"
     },
-    "type": "Warning"
+    "type": "Normal"
   }
 ```
 

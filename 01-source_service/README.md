@@ -36,7 +36,7 @@ k apply -f 010-serviceaccount.yaml
 With the `ServiceAccount` in place we can finally connect our `ApiServerSource` to the `ksvc` so it can consume events. Let's take a look at the file:
 
 ```yaml
-apiVersion: sources.eventing.knative.dev/v1alpha1
+apiVersion: sources.knative.dev/v1alpha1
 kind: ApiServerSource
 metadata:
   name: testevents
@@ -74,7 +74,7 @@ The `apiserversource` pod is now running the `ApiServerSource`, which directly s
 > NOTE: To retrieve an overview of all source that are currently deployed in your namespace, just run `k get sources`. In our case you get the following output:
 >```
 >NAME                                                      AGE
->apiserversource.sources.eventing.knative.dev/testevents   5m
+>apiserversource.sources.knative.dev/testevents   5m
 >```
 
 ## Show the consumed events
@@ -88,55 +88,48 @@ k logs -f service-one-kfhpm-deployment-747c97d7c5-x6hnl -c user-container
 The pod does run two containers, but we are only interested in the `user-container`, running our application via Knative Serving. In the log we now see some Kubernetes API server events, wrapped as CloudEvents:
 
 ```
-☁️  CloudEvent: valid ✅
+☁️  cloudevents.Event
+Validation: valid
 Context Attributes,
-  SpecVersion: 0.3
-  Type: dev.knative.apiserver.resource.add
-  Source: https://10.96.0.1:443
-  ID: f3a52b07-d1d9-4179-84c2-a5b38406fecd
-  Time: 2019-09-05T15:39:02.877250641Z
-  DataContentType: application/json
-  Extensions: 
-    knativehistory: testchannel-kn-channel.default.svc.cluster.local
-    subject: /apis/v1/namespaces/default/events/channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e
-Transport Context,
-  URI: /
-  Host: channel-display0.default.svc.cluster.local
-  Method: POST
+  specversion: 1.0
+  type: dev.knative.apiserver.resource.update
+  source: https://10.96.0.1:443
+  subject: /apis/v1/namespaces/default/events/testevents.15f90c6b780aa5a1
+  id: 6b92aaf2-a489-4adb-922b-8e60f05f15da
+  time: 2020-03-04T08:31:14.007672126Z
+  datacontenttype: application/json
 Data,
   {
     "apiVersion": "v1",
-    "count": 1,
+    "count": 10,
     "eventTime": null,
-    "firstTimestamp": "2019-09-05T15:39:02Z",
+    "firstTimestamp": "2020-03-04T08:26:39Z",
     "involvedObject": {
-      "apiVersion": "v1",
-      "fieldPath": "spec.containers{queue-proxy}",
-      "kind": "Pod",
-      "name": "channel-display0-kfhpm-deployment-747c97d7c5-hq6tl",
+      "apiVersion": "sources.knative.dev/v1alpha1",
+      "kind": "ApiServerSource",
+      "name": "testevents",
       "namespace": "default",
-      "resourceVersion": "13751",
-      "uid": "fb0fe720-cff2-11e9-9d67-70c21b40e0b5"
+      "resourceVersion": "2661",
+      "uid": "a516feb0-dd6c-4168-ab19-dd2fb4c12e59"
     },
     "kind": "Event",
-    "lastTimestamp": "2019-09-05T15:39:02Z",
-    "message": "Readiness probe failed: cannot exec in a stopped state: unknown\r\n",
+    "lastTimestamp": "2020-03-04T08:31:14Z",
+    "message": "Deployment \"apiserversource-testevents-a516feb0-dd6c-4168-ab19-dd2fb4c12e59\" updated",
     "metadata": {
-      "creationTimestamp": "2019-09-05T15:39:02Z",
-      "name": "channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e",
+      "creationTimestamp": "2020-03-04T08:26:39Z",
+      "name": "testevents.15f90c6b780aa5a1",
       "namespace": "default",
-      "resourceVersion": "14008",
-      "selfLink": "/api/v1/namespaces/default/events/channel-display0-kfhpm-deployment-747c97d7c5-hq6tl.15c194f91805af2e",
-      "uid": "4981805f-cff3-11e9-9d67-70c21b40e0b5"
+      "resourceVersion": "3560",
+      "selfLink": "/api/v1/namespaces/default/events/testevents.15f90c6b780aa5a1",
+      "uid": "07f5d445-606f-4b54-a6b6-fe226419f11e"
     },
-    "reason": "Unhealthy",
+    "reason": "ApiServerSourceDeploymentUpdated",
     "reportingComponent": "",
     "reportingInstance": "",
     "source": {
-      "component": "kubelet",
-      "host": "minikube"
+      "component": "apiserver-source-controller"
     },
-    "type": "Warning"
+    "type": "Normal"
   }
 ```
 
