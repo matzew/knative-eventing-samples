@@ -1,0 +1,9 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ping-display
+spec:
+  template:
+    spec:
+      containers:
+      - image: quay.io/matzew/event-display
